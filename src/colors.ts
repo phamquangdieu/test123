@@ -1,0 +1,12 @@
+export const BACKGROUND = '#F7F7F7';
+export const PRIMARY = '#f7941d';
+export const SECONDARY = '#314684';
+export const LIGHT_GREY = '#f4f7fb';
+export const DARK_GREY = '#6C6C6C';
+export const BLACK_TEXT = '#707070';
+export const BLUE = '#6EB2FB';
+export const CLOUDY_BLUE = '#d3dae1';
+export const GREEN = '#00D3CA';
+export const RED = '#F62F5E';
+export const ORANGE = '#F1AD3D';
+export const YELLOW = '#EFFC90';

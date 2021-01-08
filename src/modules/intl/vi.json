@@ -1,0 +1,33 @@
+{
+  "D-BO": "D-BO",
+
+  "next": "Tiếp tục",
+  "back": "Quay lại",
+  "complete": "Complete",
+  "saveAndQuit": "Lưu và thoát",
+  "generalInfo": "Thông tin chung",
+  "unit": "Đơn vị",
+  "ha": "ha",
+  "area": "Diện tích",
+  "location": "Vị trí",
+  "provinceCity": "Tỉnh/thành phố",
+  "district": "Quận/huyện",
+  "ward": "Phường/xã",
+  "street": "Phố/đường",
+  "detailAddress": "Địa chỉ cụ thể",
+
+  "validation.beingEmpty": "Đang bỏ trống",
+
+  "authen.loginViaVNDirectAccount": "Đăng nhập bằng tài khoản VNDirect",
+  "authen.authenticating": "Đang đăng nhập vào hệ thống",
+  "authen.logout": "Đăng xuất",
+
+  "project": "Dự án",
+  "project.projectListing": "Danh sách dự án",
+  "project.projectCreating": "Thêm dự án",
+  "project.projectName": "Tên dự án",
+  "project.commercialName": "Tên thương mại",
+  "project.developer": "Chủ đầu tư",
+  "project.administrator": "Đơn vị quản lý",
+  "project.inputLocationNote": "Nhập vị trí đúng nhất với dự án của bạn"
+}
