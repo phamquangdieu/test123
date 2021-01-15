@@ -38,24 +38,36 @@ const Part1Form: React.FC<Props> = ({
     () =>
       lodash.debounce(
         async (search: string) => {
-          const res = await dispatch(
+          setSearchingDevelopers(true);
+          const { content: res } = await dispatch(
             fetchThunk(API.searchDevelopers(search), {
               cancelled: false,
               data: { content: [] },
             })
           );
+          setSearchingDevelopers(false);
           setDevelopers(
-            res.content.map((one: some) => ({
-              fullName: one.fullName,
-              shortName: one.shortName,
-            }))
+            value.developer
+              ? res.content
+                  .map((one: some) => ({
+                    fullName: one.fullName,
+                    shortName: one.shortName,
+                  }))
+                  .concat([value.developer])
+              : res.content.map((one: some) => ({
+                  fullName: one.fullName,
+                  shortName: one.shortName,
+                }))
           );
         },
         500,
         { trailing: true, leading: false }
       ),
-    [dispatch]
+    [dispatch, value]
   );
+
+  const [searchingDevelopers, setSearchingDevelopers] = useState(false);
+  const [defaultDeveloper] = useState(value.developer);
 
   return (
     <div>
@@ -73,7 +85,7 @@ const Part1Form: React.FC<Props> = ({
             <CustomInput
               id="projectName"
               fullWidth
-              value={value.name || ''}
+              value={value.name || ""}
               onChange={(e) => onChange({ ...value, name: e.target.value })}
             />
             <FormHelperText error> </FormHelperText>
@@ -89,7 +101,7 @@ const Part1Form: React.FC<Props> = ({
             <CustomInput
               id="commercialName"
               fullWidth
-              value={value.commercialName || ''}
+              value={value.commercialName || ""}
               onChange={(e) => {
                 onChange({ ...value, commercialName: e.target.value });
                 updateValidation({ ...validation, commercialName: "" });
@@ -97,7 +109,7 @@ const Part1Form: React.FC<Props> = ({
             />
             <FormHelperText error>
               {validation.commercialName ? (
-                <FormattedMessage id="validation.beingEmpty" />
+                <FormattedMessage id={validation.commercialName} />
               ) : (
                 " "
               )}
@@ -105,22 +117,30 @@ const Part1Form: React.FC<Props> = ({
           </FormControl>
 
           <Autocomplete
-            freeSolo
             disableClearable
             options={developers}
-            value={value.developer || ""}
-            onChange={(e, newDeveloper) => {
-              onChange({
-                ...value,
-                developer: newDeveloper as Developer,
-              });
-              updateValidation({ ...validation, developer: "" });
+            loading={searchingDevelopers}
+            defaultValue={defaultDeveloper}
+            filterOptions={(options) => options}
+            getOptionSelected={(option, value) =>
+              value && option.shortName === value.shortName
+            }
+            onChange={(e, newDeveloper, reason) => {
+              if (reason === "select-option") {
+                onChange({
+                  ...value,
+                  developer: newDeveloper as Developer,
+                });
+                updateValidation({ ...validation, developer: "" });
+              }
+            }}
+            onInputChange={(e, value) => {
+              searchDevelopers(value);
             }}
             getOptionLabel={(option) =>
-              typeof option === "string"
-                ? ""
-                : `${option.shortName} - ${option.fullName}`
+              `${option.shortName} - ${option.fullName}`
             }
+            filterSelectedOptions
             renderInput={(params) => (
               <FormControl
                 error={!!validation.developer}
@@ -134,20 +154,15 @@ const Part1Form: React.FC<Props> = ({
                   inputRef={params.InputProps.ref}
                   inputProps={params.inputProps}
                   id="developer"
-                  type="search"
                   fullWidth
-                  onChange={(e) => {
-                    searchDevelopers(e.target.value);
-                  }}
                 />
                 <FormHelperText error>
                   {validation.developer ? (
-                    <FormattedMessage id="validation.beingEmpty" />
+                    <FormattedMessage id={validation.developer} />
                   ) : (
                     " "
                   )}
                 </FormHelperText>
-                <FormHelperText error> </FormHelperText>
               </FormControl>
             )}
           />
@@ -160,7 +175,7 @@ const Part1Form: React.FC<Props> = ({
             <CustomInput
               id="administrator"
               fullWidth
-              value={value.administrator || ''}
+              value={value.administrator || ""}
               onChange={(e) => {
                 onChange({ ...value, administrator: e.target.value });
               }}
@@ -168,19 +183,30 @@ const Part1Form: React.FC<Props> = ({
             <FormHelperText error> </FormHelperText>
           </FormControl>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <FormControl style={{ maxWidth: 250, marginBottom: 14 }} fullWidth>
-              <FormLabel htmlFor="area">
+            <FormControl
+              style={{ maxWidth: 250, marginBottom: 14 }}
+              fullWidth
+              error={!!validation.area}
+            >
+              <FormLabel htmlFor="area" required>
                 <FormattedMessage id="area" />
               </FormLabel>
               <CustomInput
                 id="area"
                 fullWidth
-                value={value.area || ''}
+                value={value.area || ""}
                 onChange={(e) => {
                   onChange({ ...value, area: parseInt(e.target.value) });
+                  updateValidation({ ...validation, area: "" });
                 }}
               />
-              <FormHelperText error> </FormHelperText>
+              <FormHelperText error>
+                {validation.area ? (
+                  <FormattedMessage id={validation.area} />
+                ) : (
+                  " "
+                )}
+              </FormHelperText>
             </FormControl>
             <div style={{ marginLeft: 20 }}>
               <Typography variant="body2">

@@ -8,12 +8,16 @@ import commonReducer, {
 import authenReducer, {
   AuthenState,
 } from "../modules/authen/redux/authenReducer";
+import projectReducer, {
+  ProjectState,
+} from "../modules/project/redux/projectReducer";
 
 export interface AppState {
   router: RouterState;
   intl: IntlState;
   common: CommonState;
   authen: AuthenState;
+  project: ProjectState;
 }
 
 export default function createRootReducer(history: History) {
@@ -22,5 +26,6 @@ export default function createRootReducer(history: History) {
     intl: intlReducer,
     common: commonReducer,
     authen: authenReducer,
+    project: projectReducer
   });
 }

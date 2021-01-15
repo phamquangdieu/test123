@@ -9,10 +9,21 @@ import { setLocale } from "./modules/intl/redux/intlReducer";
 import configureStore, { history } from "./redux/configureStore";
 import reportWebVitals from "./reportWebVitals";
 import { PersistGate } from "redux-persist/integration/react";
+import { LS_TOKEN } from "./modules/common/constants";
+import { authenIn } from "./modules/authen/redux/authenReducer";
+import jsonwebtoken from "jsonwebtoken";
 
 const { store, persistor } = configureStore({});
 
 store.dispatch(setLocale("vi"));
+
+const token = localStorage.getItem(LS_TOKEN);
+if (token) {
+  const decodedToken = jsonwebtoken.decode(token);
+  if (decodedToken) {
+    store.dispatch(authenIn((decodedToken as any)['fullName']));
+  }
+}
 
 ReactDOM.render(
   <Provider store={store}>

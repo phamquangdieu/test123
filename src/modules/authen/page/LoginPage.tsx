@@ -13,6 +13,7 @@ const LoginPage = () => {
     }
     return from;
   }, []);
+  console.log(VNDirectIdLink);
 
   return (
     <div>

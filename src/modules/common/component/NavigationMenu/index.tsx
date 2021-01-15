@@ -6,6 +6,7 @@ import { FormattedMessage } from "react-intl";
 import { useRouteMatch } from "react-router";
 import { BLACK_TEXT, SECONDARY } from "../../../../colors";
 import { ALL_MENU } from "../../constants";
+import { CustomLink } from "../element";
 import {
   IconContainer,
   MenuItemButton,
@@ -75,21 +76,24 @@ const NavigationMenu: React.FC<Props> = (props) => {
                     key={item.path}
                     style={{ display: "flex", justifyContent: "flex-start" }}
                   >
-                    <MenuItemButton
-                      variant="text"
-                      key={item.path}
-                      disabled={item.path === match.path}
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        paddingLeft: 56,
-                        justifyContent: "inherit",
-                      }}
-                    >
-                      <Typography variant="subtitle2" color="inherit">
-                        <FormattedMessage id={item.msgId}></FormattedMessage>
-                      </Typography>
-                    </MenuItemButton>
+                    <CustomLink to={item.path} style={{ width: "100%" }}>
+                      <MenuItemButton
+                        fullWidth
+                        variant="text"
+                        key={item.path}
+                        disabled={item.path === match.path}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          paddingLeft: 56,
+                          justifyContent: "inherit",
+                        }}
+                      >
+                        <Typography variant="body2" color="inherit">
+                          <FormattedMessage id={item.msgId}></FormattedMessage>
+                        </Typography>
+                      </MenuItemButton>
+                    </CustomLink>
                   </div>
                 ))}
               </NavigationMenuAccordionDetails>

@@ -22,37 +22,38 @@ export const saveToken = createCustomAction(
   (token: string) => ({ token })
 );
 
-
-export function logout(
-): ThunkAction<Promise<void>, AppState, null, Action<string>> {
+export function logout(): ThunkAction<
+  Promise<void>,
+  AppState,
+  null,
+  Action<string>
+> {
   return async (dispatch) => {
     localStorage.removeItem(LS_TOKEN);
     dispatch(authenOut());
-  }
+  };
 }
 
 export function processVNDirectToken(
   vnDirectToken: string
 ): ThunkAction<Promise<void>, AppState, null, Action<string>> {
   return async (dispatch, getState) => {
-    try {
-      const res = await dispatch(
-        fetchThunk(API.authenVnDirectToken(vnDirectToken))
-      );
-      const jwtTokenStr = res.auth.substring(7); // substring to remove prefix "Bearer "
-      const jwtToken = jwt.decode(jwtTokenStr);
-      if (jwtTokenStr && jwtToken) {
-        localStorage.setItem(LS_TOKEN, jwtTokenStr);
+    const res = await dispatch(
+      fetchThunk(API.authenVnDirectToken(vnDirectToken))
+    );
+    const jwtTokenStr = res.auth.substring(7); // substring to remove prefix "Bearer "
+    const jwtToken = jwt.decode(jwtTokenStr);
+    if (jwtTokenStr && jwtToken) {
+      localStorage.setItem(LS_TOKEN, jwtTokenStr);
 
-        dispatch(authenIn(jwtToken.sub));
-      }
-      const pathname = window.location.pathname;
-      const search = window.location.search.substring(
-        0,
-        window.location.search.indexOf("?token-id=")
-      );
-      dispatch(replace({ pathname, search }));
-    } catch (e) {}
+      dispatch(authenIn((jwtToken as any).fullName));
+    }
+    const pathname = window.location.pathname;
+    const search = window.location.search.substring(
+      0,
+      window.location.search.indexOf("?token-id=")
+    );
+    dispatch(replace({ pathname, search }));
   };
 }
 

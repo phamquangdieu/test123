@@ -1,6 +1,6 @@
 import { red } from "@material-ui/core/colors";
 import { createMuiTheme, darken, fade } from "@material-ui/core/styles";
-import { PRIMARY, SECONDARY, BLACK_TEXT, LIGHT_GREY } from "./colors";
+import { PRIMARY, SECONDARY, BLACK_TEXT, DARK_GREY } from "./colors";
 
 export const MUITheme = createMuiTheme({
   palette: {
@@ -24,7 +24,7 @@ export const MUITheme = createMuiTheme({
     },
     text: {
       primary: BLACK_TEXT,
-      secondary: LIGHT_GREY,
+      secondary: DARK_GREY,
     },
   },
   typography: {

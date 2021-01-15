@@ -1,10 +1,13 @@
-import { fade, InputBase } from "@material-ui/core";
+import { Backdrop, fade, InputBase } from "@material-ui/core";
 import { withStyles } from "@material-ui/styles";
+import { LIGHT_GREY } from "../../../colors";
+import styled from "@emotion/styled";
+import { Link } from "react-router-dom";
 
 export const CustomInput = withStyles((theme) => ({
   root: {
     "label + &": {
-      marginTop: theme.spacing(1),
+      marginTop: theme.spacing(),
     },
   },
   input: {
@@ -21,4 +24,17 @@ export const CustomInput = withStyles((theme) => ({
       borderColor: theme.palette.primary.main,
     },
   },
+  disabled: {
+    borderColor: `${LIGHT_GREY}`,
+  },
 }))(InputBase);
+
+export const CustomLink = styled(Link)`
+  text-decoration: none;
+`;
+
+export const CustomBackdrop = withStyles((theme) => ({
+  root: {
+    zIndex: theme.zIndex.drawer + 1,
+  },
+}))(Backdrop);

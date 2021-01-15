@@ -3,19 +3,29 @@ import { LIGHT_GREY } from "../../../colors";
 import AppBar from "../../common/component/AppBar";
 import MainLayout from "../../common/component/MainLayout";
 import NavigationMenu from "../../common/component/NavigationMenu";
-import CreateProjectWizard from "../component/CreateProjectWizard";
+import { PROJECT } from "../../common/constants";
+import EditProject from "../component/EditProject";
 import { Helmet } from "react-helmet";
 import { useIntl } from "react-intl";
+import { useRouteMatch } from "react-router";
+import { useMemo } from "react";
 
-const ProjectCreatingPage: React.FC<{}> = () => {
+const ProjectEditingPage: React.FC<{}> = () => {
   const intl = useIntl();
+
+  const match = useRouteMatch<{ id: string }>();
+
+  const projectId = useMemo(() => {
+    return match.params.id;
+  }, [match]);
+
   return (
     <MainLayout
       menu={<NavigationMenu />}
-      appBar={<AppBar titleMsgId="project.projectCreating" />}
+      appBar={<AppBar titleMsgId={PROJECT.items[0].msgId} />}
     >
       <Helmet>
-        <title>{intl.formatMessage({ id: "project.projectCreating" })}</title>
+        <title>{intl.formatMessage({ id: "project.projectEditing" })}</title>
       </Helmet>
       <div
         style={{
@@ -28,11 +38,11 @@ const ProjectCreatingPage: React.FC<{}> = () => {
         }}
       >
         <Paper elevation={0} square style={{ flex: 1 }}>
-          <CreateProjectWizard />
+          <EditProject id={projectId} />
         </Paper>
       </div>
     </MainLayout>
   );
 };
 
-export default ProjectCreatingPage;
+export default ProjectEditingPage;

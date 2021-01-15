@@ -4,7 +4,7 @@ module.exports = function (app) {
   app.use(
     "/api",
     createProxyMiddleware({
-      target: 'http://10.40.24.140:8080',
+      target: 'https://gateway-dev.dhomes.com.vn',
       changeOrigin: true,
       secure: false,
       pathRewrite: {

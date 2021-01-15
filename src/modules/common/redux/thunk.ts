@@ -3,7 +3,7 @@ import { ThunkAction } from "redux-thunk";
 import { AppState } from "../../../redux/reducer";
 import { logout } from "../../authen/redux/authenReducer";
 import { LS_TOKEN, some } from "../constants";
-import { setNetworkError } from "./commonReducer";
+import { setCommonError, setNetworkError } from "./commonReducer";
 
 export function fetchThunk(
   url: string,
@@ -20,10 +20,15 @@ export function fetchThunk(
         res = await fetch(url, {
           method,
           body,
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": contentType || "application/json",
-          },
+          headers:
+            contentType !== "multipart/form-data"
+              ? {
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": contentType || "application/json",
+                }
+              : {
+                  Authorization: `Bearer ${token}`,
+                },
         });
       } catch (_) {}
 
@@ -39,25 +44,32 @@ export function fetchThunk(
           try {
             const json = await res.text();
             if (json) {
-              return JSON.parse(json);
+              return { status: res.status, content: JSON.parse(json) };
             }
+            res.headers.forEach((value, key) => console.log(value, key));
+            // hack here because authorization endpoint returns access in header instead of response body
             return { auth: res.headers.get("authorization") };
           } catch (e) {
-            return {};
+            return { status: res.status, content: fallback.data };
           }
         }
 
         if (res.status === 400 || res.status === 402) {
-          return {};
+          return { status: res.status, content: fallback.data };
         }
         if (res.status === 401) {
           dispatch(logout());
-          return {};
+          return { status: 401, content: fallback.data };
         }
         if (res.status === 403) {
-          // dispatch(setNetworkError("Forbidden"));
-          return {};
+          dispatch(setCommonError("forbidden"));
+          return { status: 403, content: fallback.data };
         }
+        if (res.status === 500) {
+          return { error: 500 };
+        }
+
+        return { status: res.status, content: fallback.data };
       }
 
       let hasInternet = true;
